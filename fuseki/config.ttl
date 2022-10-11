@@ -1,0 +1,19 @@
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#>
+
+<#service1> rdf:type fuseki:Service ;
+     fuseki:name                       "default" ;       # http://host:port/default
+     fuseki:serviceQuery            "sparql" ;   # SPARQL query service
+     fuseki:serviceQuery    "query" ;    # SPARQL query service (alt name)
+     fuseki:serviceUpdate       "update" ;   # SPARQL update service
+     fuseki:serviceUpload       "upload" ;   # Non-SPARQL upload service
+     fuseki:serviceReadWriteGraphStore "data" ;    # SPARQL Graph store protocol (read and write)
+     fuseki:serviceReadGraphStore    "get" ;     # SPARQL Graph store protocol (read only)
+     fuseki:dataset                <#dataset1> ;
+     .
+
+<#dataset1> rdf:type      ja:RDFDataset .
+

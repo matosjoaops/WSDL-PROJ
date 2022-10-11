@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  fuseki:
+    container_name: wsdl-fuseki
+    build:
+      context: ./fuseki
+      dockerfile: Dockerfile
+    command: [ "/init.sh",  "-tdb2", "--config=/fuseki/config.ttl"]
+    ports:
+      - 3030:3030
+    volumes:
+      - ./volumes/fuseki:/staging
+    restart: on-failure
