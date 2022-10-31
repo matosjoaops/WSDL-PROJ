@@ -21,9 +21,7 @@ public class RestServiceApplication {
             // DEFAULT HOST
             SPARQLOperations cn = new SPARQLOperations(datasets.getDatasetHostname("default"));
 
-            if (cn.getAllBaseUuids().size() == 0) {
-                cn.importOWL(datasets.getDatasetFiles("default"));
-            }
+            cn.importOWL(datasets.getDatasetFiles("default"));
 
         } catch (Exception e) {
             e.printStackTrace();
