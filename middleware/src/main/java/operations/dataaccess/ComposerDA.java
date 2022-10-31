@@ -24,7 +24,7 @@ public class ComposerDA {
         Composer composer = new Composer();
 
         HashMap<String, ArrayList<HashMap<String, String>>> DOC_IDENTITY = new HashMap<>();
-        conn.executeQueryAndAddRawContent(queries.getDocId(uuid), DOC_IDENTITY, "uri");
+        conn.executeQueryAndAddRawContent(queries.getComposer(uuid), DOC_IDENTITY, "uri");
         composer.setDOC_IDENTITY(DOC_IDENTITY);
 
         return composer;

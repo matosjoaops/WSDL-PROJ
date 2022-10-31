@@ -25,22 +25,27 @@ import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class Composers {
 
-    private final Prefix string200717 = SparqlBuilder.prefix("string200717", iri("http://erlangen-crm.org/200717/"));
     private final Prefix owl = SparqlBuilder.prefix("owl", iri("http://www.w3.org/2002/07/owl#"));
     private final Prefix rdf = SparqlBuilder.prefix("rdf", iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
-    private final Prefix untitled_ontology = SparqlBuilder.prefix("untitledOntology", iri("http://www.example.com/#"));
     private final Prefix rdfs = SparqlBuilder.prefix("rdfs", iri("http://www.w3.org/2000/01/rdf-schema#"));
+    private final Prefix foaf = SparqlBuilder.prefix("foaf", iri("http://xmlns.com/foaf/0.1/"));
+
+    private final Prefix composer = SparqlBuilder.prefix("composer", iri("http://dbtune.org/classical/resource/composer/"));
+    private final Prefix type = SparqlBuilder.prefix("type", iri("http://dbtune.org/classical/resource/type/"));
 
     public Composers() {
 
     }
 
-    public Query getDocId(String uuid) {
-        Variable docID = SparqlBuilder.var("docID");
+    public Query getComposer(String uuid) {
+        Variable composerVar = SparqlBuilder.var("composer");
 
-        SelectQuery selectQuery =  Queries.SELECT().distinct().prefix(string200717).prefix(untitled_ontology).
-                select(docID).
-                where(docID.has(string200717.iri("has_uuid"), uuid));
+        SelectQuery selectQuery =  Queries.SELECT().distinct().prefix(foaf).prefix(composer).prefix(type).
+                select(composerVar).
+                where(
+                        composerVar.has(rdf.iri("type"), type.iri("Composer")).
+                                andHas(foaf.iri("name"), "Beethoven, Ludwig van")
+                );
 
         return QueryFactory.create(selectQuery.getQueryString());
     }
