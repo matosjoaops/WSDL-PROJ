@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  fuseki:
+  wsdl-fuseki:
     container_name: wsdl-fuseki
     build:
       context: ./fuseki
@@ -11,3 +11,14 @@ services:
     volumes:
       - ./volumes/fuseki:/staging
     restart: on-failure
+
+  wsdl-middleware:
+    container_name: wsdl-middleware
+    build: ./middleware
+    command: ["java", "-jar",  "-Dspring.profiles.active=prod", "./target/back-end.jar", "production"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - wsdl-fuseki
+    restart: on-failure
+
