@@ -1,7 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-**/catalog-v001.xml
-
 # compiled output
 dist/
 tmp/
@@ -12,8 +10,6 @@ env/
 volumes/
 node_modules/
 uploads/
-
-
 
 # IDEs and editors
 .idea
