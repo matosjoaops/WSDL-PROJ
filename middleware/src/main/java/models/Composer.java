@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class Composer {
     ArrayList<HashMap<String, String>> associatedTriples = new ArrayList<>();
+    String URI;
 
     public ArrayList<HashMap<String, String>> getAssociatedTriples() {
         return associatedTriples;
@@ -12,5 +13,13 @@ public class Composer {
 
     public void setAssociatedTriples(ArrayList<HashMap<String, String>> associatedTriples) {
         this.associatedTriples = associatedTriples;
+    }
+
+    public String getURI() {
+        return URI;
+    }
+
+    public void setURI(String URI) {
+        this.URI = URI;
     }
 }

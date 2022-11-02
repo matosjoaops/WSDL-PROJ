@@ -10,11 +10,16 @@ import java.util.HashMap;
 @Component
 public class ComposerService {
 
-    public ArrayList<HashMap<String, String>> get(String host, String id) {
+    public HashMap<String, Object> get(String host, String id) {
         ComposerDA composerDA = new ComposerDA(host);
         Composer composer = composerDA.getComposer(id);
 
-        return composer.getAssociatedTriples();
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("URI", composer.getURI());
+        result.put("associatedTriples", composer.getAssociatedTriples());
+
+        return result;
     }
 }
 

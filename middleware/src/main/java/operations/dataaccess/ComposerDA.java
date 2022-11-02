@@ -24,6 +24,19 @@ public class ComposerDA {
         Composer composer = new Composer();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposer(id));
+
+        if (associatedTriples.size() == 0) {
+            return composer;
+        }
+
+        String composerURI = associatedTriples.get(0).get("composer");
+
+        composer.setURI(composerURI);
+
+        for (HashMap<String, String> associatedTriple : associatedTriples) {
+            associatedTriple.remove("composer");
+        }
+
         composer.setAssociatedTriples(associatedTriples);
 
         return composer;
