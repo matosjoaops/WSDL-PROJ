@@ -10,14 +10,11 @@ import java.util.HashMap;
 @Component
 public class ComposerService {
 
-    public HashMap<String, HashMap<String, ArrayList<HashMap<String, String>>>> get(String host, String uuid) {
+    public ArrayList<HashMap<String, String>> get(String host, String id) {
         ComposerDA composerDA = new ComposerDA(host);
-        Composer composer = composerDA.getComposer(uuid);
+        Composer composer = composerDA.getComposer(id);
 
-        HashMap<String, HashMap<String, ArrayList<HashMap<String, String>>>> response = new HashMap<>();
-        response.put("DOC_IDENTITY", composer.getDOC_IDENTITY());
-
-        return response;
+        return composer.getAssociatedTriples();
     }
 }
 

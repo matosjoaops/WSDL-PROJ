@@ -17,6 +17,7 @@ import org.eclipse.rdf4j.sparqlbuilder.graphpattern.GraphPatternNotTriples;
 import org.eclipse.rdf4j.sparqlbuilder.graphpattern.GraphPatterns;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
+import utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,27 +25,38 @@ import java.util.Map;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class Composers {
-
-    private final Prefix owl = SparqlBuilder.prefix("owl", iri("http://www.w3.org/2002/07/owl#"));
-    private final Prefix rdf = SparqlBuilder.prefix("rdf", iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
-    private final Prefix rdfs = SparqlBuilder.prefix("rdfs", iri("http://www.w3.org/2000/01/rdf-schema#"));
-    private final Prefix foaf = SparqlBuilder.prefix("foaf", iri("http://xmlns.com/foaf/0.1/"));
-
-    private final Prefix composer = SparqlBuilder.prefix("composer", iri("http://dbtune.org/classical/resource/composer/"));
-    private final Prefix type = SparqlBuilder.prefix("type", iri("http://dbtune.org/classical/resource/type/"));
-
     public Composers() {
 
     }
 
-    public Query getComposer(String uuid) {
-        Variable composerVar = SparqlBuilder.var("composer");
+    // Equivalent query in SPARQL
 
-        SelectQuery selectQuery =  Queries.SELECT().distinct().prefix(foaf).prefix(composer).prefix(type).
-                select(composerVar).
+    /*PREFIX type: <http://dbtune.org/classical/resource/type/>
+
+    SELECT ?composer ?predicate ?object
+    WHERE {
+        ?composer a type:Composer .
+        ?composer ?predicate ?object .
+
+        filter (regex(str(?composer), "^http://dbtune.org/classical/resource/composer/uspensky_vladimir$")) .
+    }*/
+
+    public Query getComposer(String id) {
+        Variable composer = SparqlBuilder.var("composer");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        SelectQuery selectQuery = Queries.SELECT().distinct().prefix(Constants.type).prefix(Constants.rdf).
+                select(composer, predicate, object).
                 where(
-                        composerVar.has(rdf.iri("type"), type.iri("Composer")).
-                                andHas(foaf.iri("name"), "Beethoven, Ludwig van")
+                    composer.has(Constants.rdf.iri("type"), Constants.type.iri("Composer")).
+                    andHas(predicate, object).
+                    filter(
+                        Expressions.regex(
+                            Expressions.str(composer),
+                            String.format("^http://dbtune.org/classical/resource/composer/%s$", id)
+                        )
+                    )
                 );
 
         return QueryFactory.create(selectQuery.getQueryString());

@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Datasets {
     private static String host = "";
-    private HashMap<String, Dataset> datasets;
-    private String defaultDataset;
+    private final HashMap<String, Dataset> datasets;
+    private final String defaultDataset;
 
-    public class Dataset {
+    public static class Dataset {
         private final String name;
         private final String description;
         private final List<String> files;

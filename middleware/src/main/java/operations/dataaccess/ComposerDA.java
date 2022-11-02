@@ -19,13 +19,12 @@ public class ComposerDA {
         this.hosts.put("update", host + "update");
         this.hosts.put("default", host);
     }
-    public Composer getComposer(String uuid) {
+    public Composer getComposer(String id) {
         SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
         Composer composer = new Composer();
 
-        HashMap<String, ArrayList<HashMap<String, String>>> DOC_IDENTITY = new HashMap<>();
-        conn.executeQueryAndAddRawContent(queries.getComposer(uuid), DOC_IDENTITY, "uri");
-        composer.setDOC_IDENTITY(DOC_IDENTITY);
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposer(id));
+        composer.setAssociatedTriples(associatedTriples);
 
         return composer;
     }
