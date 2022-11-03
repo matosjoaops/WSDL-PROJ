@@ -50,4 +50,21 @@ public class EventDA {
 
         return response;
     }
+
+    public Map<String, String> insertEvent(Map<String, Object> insertForm) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        String eventURI = (String) insertForm.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        conn.executeUpdate(queries.insertEvent(
+                eventURI,
+                associatedTriples
+        ));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Event created successfully.");
+
+        return response;
+    }
 }

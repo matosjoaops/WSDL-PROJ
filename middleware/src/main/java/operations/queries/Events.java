@@ -15,6 +15,9 @@ import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import utils.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Events {
     public Events() {
 
@@ -88,5 +91,10 @@ public class Events {
                 );
 
         return UpdateFactory.create(deleteQuery.getQueryString());
+    }
+
+    public UpdateRequest insertEvent(String eventURI, ArrayList<HashMap<String, String>> associatedTriples) {
+
+        return UpdateFactory.create("");
     }
 }

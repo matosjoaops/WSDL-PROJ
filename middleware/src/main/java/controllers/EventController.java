@@ -50,4 +50,24 @@ public class EventController extends Controller {
             }
         }
     }
+
+    @CrossOrigin
+    @PostMapping(value = {"/event"})
+    public Map<String, String> insertEvent(
+            @RequestBody Map<String, Object> insertForm
+    ) {
+        EventService eventService = new EventService(getFusekiHost("default"));
+
+        try {
+            return eventService.insert(insertForm);
+        } catch(Exception e) {
+            if (e.getMessage() != null) {
+                HashMap<String, String> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
+            }
+        }
+    }
 }
