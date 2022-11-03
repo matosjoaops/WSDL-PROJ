@@ -51,7 +51,30 @@ public class EventDA {
         return response;
     }
 
+    private boolean validateInsertForm(Map<String, Object> insertForm) {
+        if (!insertForm.containsKey("URI") || !insertForm.containsKey("associatedTriples")) {
+            return false;
+        }
+
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        for (HashMap<String, String> associatedTriple : associatedTriples) {
+            if (!associatedTriple.containsKey("predicate") || !associatedTriple.containsKey("object") || associatedTriple.size() != 2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public Map<String, String> insertEvent(Map<String, Object> insertForm) throws Exception {
+        HashMap<String, String> response = new HashMap<>();
+
+        if (!validateInsertForm(insertForm)) {
+            response.put("message", "Invalid body! Please provide the event URI and the associated triples.");
+            return response;
+        }
+
         SPARQLOperations conn = new SPARQLOperations(this.host);
 
         String eventURI = (String) insertForm.get("URI");
@@ -62,7 +85,6 @@ public class EventDA {
                 associatedTriples
         ));
 
-        HashMap<String, String> response = new HashMap<>();
         response.put("message", "Event created successfully.");
 
         return response;
