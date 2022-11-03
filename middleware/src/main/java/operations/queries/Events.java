@@ -5,24 +5,29 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.update.UpdateFactory;
 import org.apache.jena.update.UpdateRequest;
-import org.apache.zookeeper.proto.DeleteRequest;
 import org.eclipse.rdf4j.sparqlbuilder.constraint.Expressions;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
-import org.eclipse.rdf4j.sparqlbuilder.core.query.DeleteDataQuery;
+import org.eclipse.rdf4j.sparqlbuilder.core.query.InsertDataQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import utils.Constants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class Events {
     public Events() {
 
     }
 
-    // Equivalent query in SPARQL
-
     /*
+    # Equivalent query in SPARQL
+
     PREFIX type: <http://dbtune.org/classical/resource/type/>
 
     SELECT ?event ?predicate ?object
@@ -53,9 +58,9 @@ public class Events {
         return QueryFactory.create(selectQuery.getQueryString());
     }
 
-    // Equivalent query in SPARQL
-
     /*
+    # Equivalent query in SPARQL
+
     DELETE { ?event ?predicate ?object }
     WHERE {
         ?event ?predicate ?object .
@@ -88,5 +93,31 @@ public class Events {
                 );
 
         return UpdateFactory.create(deleteQuery.getQueryString());
+    }
+
+    /*
+    # Equivalent query in SPARQL
+
+    INSERT DATA {
+        <event-URI> <predicate1> <object1> .
+        <event-URI> <predicate2> <object2> .
+        <event-URI> <predicate3> <object3> .
+    }
+    */
+
+    public ArrayList<UpdateRequest> insertEvent(String eventURIString, ArrayList<HashMap<String, Iri>> associatedTriples) {
+        Iri eventURI = iri(eventURIString);
+
+        ArrayList<UpdateRequest> insertQueries = new ArrayList<>();
+
+        for (HashMap<String, Iri> triple: associatedTriples) {
+            InsertDataQuery insertDataQuery = Queries.INSERT_DATA().
+                    insertData(
+                            eventURI.has(triple.get("predicate"), triple.get("object"))
+                    );
+            insertQueries.add(UpdateFactory.create(insertDataQuery.getQueryString()));
+        }
+
+        return insertQueries;
     }
 }

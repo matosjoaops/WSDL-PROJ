@@ -29,9 +29,9 @@ public class Composers {
 
     }
 
-    // Equivalent query in SPARQL
-
     /*
+    # Equivalent query in SPARQL
+
     PREFIX type: <http://dbtune.org/classical/resource/type/>
 
     SELECT ?composer ?predicate ?object

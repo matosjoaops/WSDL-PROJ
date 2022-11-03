@@ -4,10 +4,14 @@ import models.Event;
 import operations.SPARQLOperations;
 import operations.queries.Events;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class EventDA {
     public String host;
@@ -47,6 +51,58 @@ public class EventDA {
 
         HashMap<String, String> response = new HashMap<>();
         response.put("message", "Event deleted successfully.");
+
+        return response;
+    }
+
+    private boolean validateInsertForm(Map<String, Object> insertForm) {
+        if (!insertForm.containsKey("URI") || !insertForm.containsKey("associatedTriples")) {
+            return false;
+        }
+
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        for (HashMap<String, String> associatedTriple : associatedTriples) {
+            if (!associatedTriple.containsKey("predicate") || !associatedTriple.containsKey("object") || associatedTriple.size() != 2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private ArrayList<HashMap<String, Iri>> convertTriplesStringsToIRIs(ArrayList<HashMap<String, String>> triplesInStrings) {
+        ArrayList<HashMap<String, Iri>> result = new ArrayList<>();
+        for (HashMap<String, String> tripleInStrings: triplesInStrings) {
+            HashMap<String, Iri> triple = new HashMap<>();
+            triple.put("predicate", iri(tripleInStrings.get("predicate")));
+            triple.put("object", iri(tripleInStrings.get("object")));
+            result.add(triple);
+        }
+        return result;
+    }
+
+    public Map<String, String> insertEvent(Map<String, Object> insertForm) throws Exception {
+        HashMap<String, String> response = new HashMap<>();
+
+        if (!validateInsertForm(insertForm)) {
+            response.put("message", "Invalid body! Please provide the event URI and the associated triples.");
+            return response;
+        }
+
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        String eventURI = (String) insertForm.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        ArrayList<UpdateRequest> insertQueries = queries.insertEvent(
+                eventURI,
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
+
+        response.put("message", "Event created successfully.");
 
         return response;
     }

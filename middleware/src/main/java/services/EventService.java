@@ -30,6 +30,10 @@ public class EventService {
     public Map<String, String> delete(String id) throws Exception {
         return eventDA.deleteEvent(id);
     }
+
+    public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
+        return eventDA.insertEvent(insertForm);
+    }
 }
 
 

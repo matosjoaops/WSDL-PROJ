@@ -75,6 +75,26 @@ public class SPARQLOperations {
         } catch (Exception e) {
             throw new Exception("Update failed!");
         }
+    }
 
+    public void executeUpdateList(List<UpdateRequest> updateList) throws Exception {
+        RDFConnectionRemoteBuilder builder = RDFConnectionFuseki.create()
+                .destination(updateHost);
+
+        try (RDFConnectionFuseki conn = (RDFConnectionFuseki) builder.build()) {
+            try {
+                conn.begin(ReadWrite.WRITE);
+                for (UpdateRequest update : updateList) {
+                    conn.update(update);
+                }
+                conn.commit();
+            } catch (Exception e) {
+                conn.abort();
+                e.printStackTrace();
+                throw new Exception("Update failed!");
+            } finally {
+                conn.end();
+            }
+        }
     }
 }
