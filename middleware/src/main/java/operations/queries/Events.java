@@ -72,8 +72,7 @@ public class Events {
         Variable predicate = SparqlBuilder.var("predicate");
         Variable object = SparqlBuilder.var("object");
 
-        ModifyQuery deleteQuery = Queries.DELETE()
-                .delete(event.has(predicate, object)).
+        ModifyQuery deleteQuery = Queries.DELETE(event.has(predicate, object)).
                 where(
                         event.has(predicate, object).
                                 filter(Expressions.or(

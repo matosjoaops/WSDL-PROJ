@@ -29,7 +29,6 @@ public class SPARQLOperations {
 
             // load datasets
             for (String fileName : fileNames) {
-                System.out.println(fileName);
                 conn.load(fileName);
             }
         }
@@ -69,8 +68,7 @@ public class SPARQLOperations {
     }
 
     public void executeUpdate(UpdateRequest update) throws Exception {
-        RDFConnectionRemoteBuilder builder = RDFConnectionFuseki.create()
-                .destination(updateHost);
+        RDFConnectionRemoteBuilder builder = RDFConnectionFuseki.create().destination(updateHost);
 
         try (RDFConnectionFuseki conn = (RDFConnectionFuseki) builder.build()) {
             conn.update(update);

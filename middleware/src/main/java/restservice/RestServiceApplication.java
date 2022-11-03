@@ -12,7 +12,6 @@ public class RestServiceApplication {
     public static void main(String[] args) {
 
         ApplicationContext applicationContext = SpringApplication.run(RestServiceApplication.class, args);
-        System.out.println(applicationContext.getEnvironment().getProperty("config.fusekiHost"));
 
         Datasets.setHost(applicationContext.getEnvironment().getProperty("config.fusekiHost"));
         Datasets datasets = new Datasets();
@@ -26,7 +25,7 @@ public class RestServiceApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.err.println("===========================IS THIS CHANGING?!==========================================");
+        System.out.println("===========================REST API Ready==========================================");
     }
 
 }

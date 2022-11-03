@@ -7,20 +7,18 @@ import org.apache.jena.rdf.model.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class EventDA {
-    public HashMap<String, String> hosts = new HashMap<>();
+    public String host;
     Events queries = new Events();
     public Model model;
 
     public EventDA(String host) {
-        this.hosts.put("sparql", host + "sparql");
-        this.hosts.put("data", host + "data");
-        this.hosts.put("update", host + "update");
-        this.hosts.put("default", host);
+        this.host = host;
     }
     public Event getEvent(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         Event event = new Event();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getEvent(id));
@@ -42,9 +40,14 @@ public class EventDA {
         return event;
     }
 
-    public void deleteEvent(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("update"));
+    public Map<String, String> deleteEvent(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
 
         conn.executeUpdate(queries.deleteEvent(id));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Event deleted successfully.");
+
+        return response;
     }
 }

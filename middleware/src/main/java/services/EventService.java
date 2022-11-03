@@ -5,6 +5,7 @@ import operations.dataaccess.EventDA;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class EventService {
@@ -26,8 +27,8 @@ public class EventService {
         return result;
     }
 
-    public void delete(String id) throws Exception {
-        eventDA.deleteEvent(id);
+    public Map<String, String> delete(String id) throws Exception {
+        return eventDA.deleteEvent(id);
     }
 }
 

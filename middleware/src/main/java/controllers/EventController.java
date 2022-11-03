@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import services.EventService;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class EventController extends Controller {
@@ -30,13 +31,13 @@ public class EventController extends Controller {
 
     @CrossOrigin
     @DeleteMapping(value = {"/event/{id}"})
-    public void deleteEvent(
+    public Map<String, String> deleteEvent(
             @PathVariable(name = "id") String id
     ) {
         EventService eventService = new EventService(getFusekiHost("default"));
 
         try {
-            eventService.delete(id);
+            return eventService.delete(id);
         } catch (Exception e) {
             if (e.getMessage() != null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
