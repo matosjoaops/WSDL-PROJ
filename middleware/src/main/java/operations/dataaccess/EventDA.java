@@ -19,14 +19,14 @@ public class EventDA {
         this.hosts.put("update", host + "update");
         this.hosts.put("default", host);
     }
-    public Event getEvent(String id) {
+    public Event getEvent(String id) throws Exception {
         SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
         Event event = new Event();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getEvent(id));
 
         if (associatedTriples.size() == 0) {
-            return event;
+            throw new Exception(String.format("The event with id '%s' does not exist.", id));
         }
 
         String eventURI = associatedTriples.get(0).get("event");
@@ -40,5 +40,11 @@ public class EventDA {
         event.setAssociatedTriples(associatedTriples);
 
         return event;
+    }
+
+    public void deleteEvent(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        conn.executeQuery(queries.deleteEvent(id));
     }
 }

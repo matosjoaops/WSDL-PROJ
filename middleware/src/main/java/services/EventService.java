@@ -9,8 +9,13 @@ import java.util.HashMap;
 @Component
 public class EventService {
 
-    public HashMap<String, Object> get(String host, String id) {
-        EventDA eventDA = new EventDA(host);
+    EventDA eventDA;
+
+    public EventService(String host) {
+        eventDA = new EventDA(host);
+    }
+
+    public HashMap<String, Object> get(String id) throws Exception {
         Event event = eventDA.getEvent(id);
 
         HashMap<String, Object> result = new HashMap<>();
@@ -19,6 +24,10 @@ public class EventService {
         result.put("associatedTriples", event.getAssociatedTriples());
 
         return result;
+    }
+
+    public void delete(String id) throws Exception {
+        eventDA.deleteEvent(id);
     }
 }
 
