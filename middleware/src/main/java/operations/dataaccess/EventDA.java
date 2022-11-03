@@ -4,10 +4,14 @@ import models.Event;
 import operations.SPARQLOperations;
 import operations.queries.Events;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class EventDA {
     public String host;
@@ -67,6 +71,17 @@ public class EventDA {
         return true;
     }
 
+    private ArrayList<HashMap<String, Iri>> convertTriplesStringsToIRIs(ArrayList<HashMap<String, String>> triplesInStrings) {
+        ArrayList<HashMap<String, Iri>> result = new ArrayList<>();
+        for (HashMap<String, String> tripleInStrings: triplesInStrings) {
+            HashMap<String, Iri> triple = new HashMap<>();
+            triple.put("predicate", iri(tripleInStrings.get("predicate")));
+            triple.put("object", iri(tripleInStrings.get("object")));
+            result.add(triple);
+        }
+        return result;
+    }
+
     public Map<String, String> insertEvent(Map<String, Object> insertForm) throws Exception {
         HashMap<String, String> response = new HashMap<>();
 
@@ -80,10 +95,12 @@ public class EventDA {
         String eventURI = (String) insertForm.get("URI");
         ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
 
-        conn.executeUpdate(queries.insertEvent(
+        ArrayList<UpdateRequest> insertQueries = queries.insertEvent(
                 eventURI,
-                associatedTriples
-        ));
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
 
         response.put("message", "Event created successfully.");
 
