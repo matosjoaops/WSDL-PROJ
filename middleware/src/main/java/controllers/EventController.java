@@ -29,7 +29,7 @@ public class EventController extends Controller {
     }
 
     @CrossOrigin
-    @DeleteMapping(value = {"event/{id}"})
+    @DeleteMapping(value = {"/event/{id}"})
     public void deleteEvent(
             @PathVariable(name = "id") String id
     ) {

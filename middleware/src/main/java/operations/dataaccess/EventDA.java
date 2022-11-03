@@ -43,8 +43,8 @@ public class EventDA {
     }
 
     public void deleteEvent(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("update"));
 
-        conn.executeQuery(queries.deleteEvent(id));
+        conn.executeUpdate(queries.deleteEvent(id));
     }
 }

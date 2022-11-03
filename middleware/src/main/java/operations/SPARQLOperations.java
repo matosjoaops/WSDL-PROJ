@@ -4,6 +4,7 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdfconnection.RDFConnectionFuseki;
 import org.apache.jena.rdfconnection.RDFConnectionRemoteBuilder;
+import org.apache.jena.update.UpdateRequest;
 
 import java.util.*;
 
@@ -65,5 +66,17 @@ public class SPARQLOperations {
             qExec.close();
         }
         return myArrayList;
+    }
+
+    public void executeUpdate(UpdateRequest update) throws Exception {
+        RDFConnectionRemoteBuilder builder = RDFConnectionFuseki.create()
+                .destination(updateHost);
+
+        try (RDFConnectionFuseki conn = (RDFConnectionFuseki) builder.build()) {
+            conn.update(update);
+        } catch (Exception e) {
+            throw new Exception("Update failed!");
+        }
+
     }
 }
