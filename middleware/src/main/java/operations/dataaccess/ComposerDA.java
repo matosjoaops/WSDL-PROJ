@@ -26,7 +26,7 @@ public class ComposerDA {
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposer(id));
 
         if (associatedTriples.size() == 0) {
-            throw new Exception(String.format("The composer with id '%d' does not exist.", id));
+            throw new Exception(String.format("The composer with id '%s' does not exist.", id));
         }
 
         String composerURI = associatedTriples.get(0).get("composer");
