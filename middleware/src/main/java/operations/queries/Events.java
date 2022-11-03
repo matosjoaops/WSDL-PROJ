@@ -21,9 +21,9 @@ public class Events {
 
     }
 
-    // Equivalent query in SPARQL
-
     /*
+    # Equivalent query in SPARQL
+
     PREFIX type: <http://dbtune.org/classical/resource/type/>
 
     SELECT ?event ?predicate ?object
@@ -54,9 +54,9 @@ public class Events {
         return QueryFactory.create(selectQuery.getQueryString());
     }
 
-    // Equivalent query in SPARQL
-
     /*
+    # Equivalent query in SPARQL
+
     DELETE { ?event ?predicate ?object }
     WHERE {
         ?event ?predicate ?object .
@@ -90,6 +90,16 @@ public class Events {
 
         return UpdateFactory.create(deleteQuery.getQueryString());
     }
+
+    /*
+    # Equivalent query in SPARQL
+
+    INSERT DATA {
+        <event-URI> <predicate1> <object1> .
+        <event-URI> <predicate2> <object2> .
+        <event-URI> <predicate3> <object3>
+    }
+    */
 
     public UpdateRequest insertEvent(String eventURI, ArrayList<HashMap<String, String>> associatedTriples) {
 
