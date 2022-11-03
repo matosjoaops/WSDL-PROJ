@@ -42,7 +42,9 @@ public class EventController extends Controller {
             return eventService.delete(id);
         } catch (Exception e) {
             if (e.getMessage() != null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+                HashMap<String, String> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
             }

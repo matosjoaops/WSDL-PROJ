@@ -9,9 +9,13 @@ import java.util.HashMap;
 
 @Component
 public class ComposerService {
+    ComposerDA composerDA;
 
-    public HashMap<String, Object> get(String host, String id) {
-        ComposerDA composerDA = new ComposerDA(host);
+    public ComposerService(String host) {
+        composerDA = new ComposerDA(host);
+    }
+
+    public HashMap<String, Object> get(String id) throws Exception {
         Composer composer = composerDA.getComposer(id);
 
         HashMap<String, Object> result = new HashMap<>();
