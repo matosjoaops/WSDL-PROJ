@@ -31,7 +31,8 @@ public class Composers {
 
     // Equivalent query in SPARQL
 
-    /*PREFIX type: <http://dbtune.org/classical/resource/type/>
+    /*
+    PREFIX type: <http://dbtune.org/classical/resource/type/>
 
     SELECT ?composer ?predicate ?object
     WHERE {
@@ -39,7 +40,8 @@ public class Composers {
         ?composer ?predicate ?object .
 
         filter (regex(str(?composer), "^http://dbtune.org/classical/resource/composer/uspensky_vladimir$")) .
-    }*/
+    }
+    */
 
     public Query getComposer(String id) {
         Variable composer = SparqlBuilder.var("composer");
