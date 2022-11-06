@@ -19,14 +19,14 @@ public class ComposerDA {
         this.hosts.put("update", host + "update");
         this.hosts.put("default", host);
     }
-    public Composer getComposer(String id) {
+    public Composer getComposer(String id) throws Exception {
         SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
         Composer composer = new Composer();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposer(id));
 
         if (associatedTriples.size() == 0) {
-            return composer;
+            throw new Exception(String.format("The composer with id '%s' does not exist.", id));
         }
 
         String composerURI = associatedTriples.get(0).get("composer");
