@@ -1,14 +1,13 @@
 package operations.dataaccess;
 
-import models.Composer;
 import models.Work;
 import operations.SPARQLOperations;
-import operations.queries.Composers;
 import operations.queries.Works;
 import org.apache.jena.rdf.model.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WorkDA {
 
@@ -32,16 +31,44 @@ public class WorkDA {
             return work;
         }
 
-        String composerURI = associatedTriples.get(0).get("composer");
+        String workURI = associatedTriples.get(0).get("work");
 
-        work.setURI(composerURI);
+        work.setURI(workURI);
 
         for (HashMap<String, String> associatedTriple : associatedTriples) {
-            associatedTriple.remove("composer");
+            associatedTriple.remove("work");
         }
 
         work.setAssociatedTriples(associatedTriples);
 
         return work;
+    }
+    /*
+    public Map<String, String> updateWork(String composerId, String workId, Map<String, Object> workData) {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        HashMap<String, String> response = new HashMap<>();
+
+        conn.executeUpdate(queries.updateWork());
+
+        return response;
+    }
+
+    public Map<String, String> createWork(Map<String, Object> workData) {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        HashMap<String, String> response = new HashMap<>();
+
+        conn.executeUpdate(queries.createWork());
+
+        return response;
+    }*/
+
+    public Map<String, String> deleteWork(String composerId, String workId) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        conn.executeUpdate(queries.deleteWork(composerId, workId));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Event was deleted successfully.");
+
+        return response;
     }
 }
