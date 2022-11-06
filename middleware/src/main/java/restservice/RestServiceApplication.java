@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import utils.Datasets;
 
-@SpringBootApplication(scanBasePackages = {"controllers"})
+@SpringBootApplication(scanBasePackages = {"controllers", "services"})
 public class RestServiceApplication {
 
     public static void main(String[] args) {

@@ -12,4 +12,5 @@ public final class Constants {
     public static final Prefix foaf = SparqlBuilder.prefix("foaf", iri("http://xmlns.com/foaf/0.1/"));
     public static final Prefix composer = SparqlBuilder.prefix("composer", iri("http://dbtune.org/classical/resource/composer/"));
     public static final Prefix type = SparqlBuilder.prefix("type", iri("http://dbtune.org/classical/resource/type/"));
+    public static final Prefix ns2 = SparqlBuilder.prefix("ns2", iri("http://purl.org/ontology/mo/"));
 }
