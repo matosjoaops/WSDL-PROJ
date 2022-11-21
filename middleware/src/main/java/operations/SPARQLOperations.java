@@ -26,6 +26,7 @@ public class SPARQLOperations {
         try (RDFConnectionFuseki conn = (RDFConnectionFuseki) builder.build()) {
             // load ontologies
             conn.load("datasets/classical.ttl");
+            conn.load("datasets/void.ttl");
 
             // load datasets
             for (String fileName : fileNames) {
