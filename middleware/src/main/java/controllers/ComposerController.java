@@ -29,4 +29,24 @@ public class ComposerController extends Controller {
             }
         }
     }
+
+    @CrossOrigin
+    @GetMapping(value = {"/composer/dbpedia-federation/{id}"})
+    public HashMap<String, Object> getDBpediaData(
+            @PathVariable(name = "id") String id
+    ) {
+        ComposerService composerService = new ComposerService(getFusekiHost("default"));
+
+        try {
+            return composerService.getDBpediaData(id);
+        } catch (Exception e) {
+            if (e.getMessage() != null) {
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
+            }
+        }
+    }
 }
