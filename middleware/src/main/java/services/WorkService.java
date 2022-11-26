@@ -27,17 +27,15 @@ public class WorkService {
 
         return result;
     }
-    /*
-    public HashMap<String, Object> update(String composerId, String workId, Map<String, Object> workData) {
-        Work work = workDA.updateWork(composerId, workId, workData);
-        HashMap<String, Object> result = new HashMap<>();
 
-        result.put("URI", work.getURI());
-        result.put("associatedTriples", work.getAssociatedTriples());
-
+    public Map<String, String> update(String composerId, String workId, Map<String, Object> workData) throws Exception {
+        delete(composerId, workId);
+        workData.put("URI", "http://dbtune.org/classical/resource/work/" + composerId + "/" + workId);
+        Map<String, String> result = create(workData);
+        result.put("message", "Work was updated successfully.");
         return result;
     }
-*/
+
     public Map<String, String> create(Map<String, Object> workData) throws Exception {
        return workDA.createWork(workData);
     }

@@ -25,17 +25,28 @@ public class WorkController extends Controller {
         if (result.get("URI") == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find a work with the provided IDs.");
         return result;
     }
-/*
     @CrossOrigin
     @PutMapping("/{composerId}/{workId}")
-    public HashMap<String, Object> updateWork(
-            @PathVariable("composerId") String composerId, @PathVariable("workId") String workId, @RequestBody Map<String, Object> workData
+    public Map<String, String> updateWork(
+            @PathVariable("composerId") String composerId,
+            @PathVariable("workId") String workId,
+            @RequestBody Map<String, Object> workData
     ) {
         String fusekiHost = getFusekiHost("default");
         WorkService workService = new WorkService(fusekiHost);
-        return workService.update(composerId, workId, workData);
+
+        try {
+            return workService.update(composerId, workId, workData);
+        } catch (Exception e) {
+            if (e.getMessage() != null) {
+                HashMap<String, String> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
+            } else  {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is something wrong with the data that was provided.");
+            }
+        }
     }
-*/
     @CrossOrigin
     @PostMapping("/")
     public Map<String, String> createWork(
