@@ -4,10 +4,14 @@ import models.Work;
 import operations.SPARQLOperations;
 import operations.queries.Works;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static operations.dataaccess.EventDA.convertTriplesStringsToIRIs;
+import static operations.dataaccess.EventDA.validateInsertForm;
 
 public class WorkDA {
 
@@ -52,22 +56,39 @@ public class WorkDA {
 
         return response;
     }
-
-    public Map<String, String> createWork(Map<String, Object> workData) {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+*/
+    public Map<String, String> createWork(Map<String, Object> workData) throws Exception {
         HashMap<String, String> response = new HashMap<>();
 
-        conn.executeUpdate(queries.createWork());
+
+        if (!validateInsertForm(workData)) {
+            response.put("message", "Invalid body! Please provide the work URI and the associated triples.");
+            return response;
+        }
+
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        String workURI = (String) workData.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) workData.get("associatedTriples");
+
+        ArrayList<UpdateRequest> insertQueries = queries.createWork(
+                workURI,
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
+
+        response.put("message", "Work was created successfully.");
 
         return response;
-    }*/
+    }
 
     public Map<String, String> deleteWork(String composerId, String workId) throws Exception {
         SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
         conn.executeUpdate(queries.deleteWork(composerId, workId));
 
         HashMap<String, String> response = new HashMap<>();
-        response.put("message", "Event was deleted successfully.");
+        response.put("message", "Work was deleted successfully.");
 
         return response;
     }

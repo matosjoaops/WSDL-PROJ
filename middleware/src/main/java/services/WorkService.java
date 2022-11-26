@@ -37,16 +37,10 @@ public class WorkService {
 
         return result;
     }
-
-    public HashMap<String, Object> create(Map<String, Object> workData) {
-        Work work = workDA.createWork(workData);
-        HashMap<String, Object> result = new HashMap<>();
-
-        result.put("URI", work.getURI());
-        result.put("associatedTriples", work.getAssociatedTriples());
-
-        return result;
-    }*/
+*/
+    public Map<String, String> create(Map<String, Object> workData) throws Exception {
+       return workDA.createWork(workData);
+    }
 
     public Map<String, String> delete(String composerId, String workId) throws Exception {
         return workDA.deleteWork(composerId, workId);

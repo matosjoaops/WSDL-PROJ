@@ -35,16 +35,27 @@ public class WorkController extends Controller {
         WorkService workService = new WorkService(fusekiHost);
         return workService.update(composerId, workId, workData);
     }
-
+*/
     @CrossOrigin
     @PostMapping("/")
-    public HashMap<String, Object> createWork(
+    public Map<String, String> createWork(
            @RequestBody Map<String, Object> workData
     ) {
         String fusekiHost = getFusekiHost("default");
         WorkService workService = new WorkService(fusekiHost);
-        return workService.create(workData);
-    }*/
+
+        try {
+            return workService.create(workData);
+        } catch (Exception e) {
+            if (e.getMessage() != null) {
+                HashMap<String, String> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
+            } else  {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is something wrong with the data that was provided.");
+            }
+        }
+    }
 
     @CrossOrigin
     @DeleteMapping("/{composerId}/{workId}")

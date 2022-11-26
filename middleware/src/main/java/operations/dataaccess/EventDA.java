@@ -55,7 +55,7 @@ public class EventDA {
         return response;
     }
 
-    private boolean validateInsertForm(Map<String, Object> insertForm) {
+    public static boolean validateInsertForm(Map<String, Object> insertForm) {
         if (!insertForm.containsKey("URI") || !insertForm.containsKey("associatedTriples")) {
             return false;
         }
@@ -71,7 +71,7 @@ public class EventDA {
         return true;
     }
 
-    private ArrayList<HashMap<String, Iri>> convertTriplesStringsToIRIs(ArrayList<HashMap<String, String>> triplesInStrings) {
+    public static ArrayList<HashMap<String, Iri>> convertTriplesStringsToIRIs(ArrayList<HashMap<String, String>> triplesInStrings) {
         ArrayList<HashMap<String, Iri>> result = new ArrayList<>();
         for (HashMap<String, String> tripleInStrings: triplesInStrings) {
             HashMap<String, Iri> triple = new HashMap<>();
