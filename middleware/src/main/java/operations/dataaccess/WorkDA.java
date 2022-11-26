@@ -47,16 +47,7 @@ public class WorkDA {
 
         return work;
     }
-    /*
-    public Map<String, String> updateWork(String composerId, String workId, Map<String, Object> workData) {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
-        HashMap<String, String> response = new HashMap<>();
 
-        conn.executeUpdate(queries.updateWork());
-
-        return response;
-    }
-*/
     public Map<String, String> createWork(Map<String, Object> workData) throws Exception {
         HashMap<String, String> response = new HashMap<>();
 
