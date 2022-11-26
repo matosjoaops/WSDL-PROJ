@@ -41,4 +41,19 @@ public class ComposerDA {
 
         return composer;
     }
+
+    public Composer getDBpediaData(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        Composer composer = new Composer();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getDBpediaData(id));
+
+        if (associatedTriples.size() == 0) {
+            throw new Exception(String.format("The composer with id '%s' does not exist in DBPedia.", id));
+        }
+
+        composer.setAssociatedTriples(associatedTriples);
+
+        return composer;
+    }
 }

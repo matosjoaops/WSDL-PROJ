@@ -63,4 +63,36 @@ public class Composers {
 
         return QueryFactory.create(selectQuery.getQueryString());
     }
+
+    public Query getDBpediaData(String id) {
+        String selectQuery = String.format("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX void: <http://rdfs.org/ns/void#>\n" +
+                "PREFIX DBpedia: <https://www.dbpedia.org/>\n" +
+                "\n" +
+                "SELECT DISTINCT ?predicate ?predicateLabel ?value ?valueLabel\n" +
+                "WHERE {\n" +
+                "  DBpedia: void:sparqlEndpoint ?sparqlEndpoint .\n" +
+                "  <http://dbtune.org/classical/resource/composer/%s> owl:sameAs ?externalResource .\n" +
+                "  filter ( regex(str(?externalResource), \"dbpedia\")) .\n" +
+                "  \n" +
+                "  SERVICE ?sparqlEndpoint {\n" +
+                "    ?externalResource ?predicate ?value .\n" +
+                "    \n" +
+                "    OPTIONAL { \n" +
+                "   \t  ?predicate rdfs:label ?predicateLabel .\n" +
+                "      FILTER (lang(?predicateLabel) = \"en\") .\n" +
+                "    }\n" +
+                "    \n" +
+                "    OPTIONAL { \n" +
+                "   \t  ?value rdfs:label ?valueLabel .\n" +
+                "      FILTER (lang(?valueLabel) = \"en\") .\n" +
+                "    }\n" +
+                "    \n" +
+                "    FILTER ( IF (isLiteral(?value), lang(?value) = \"en\", TRUE) ) .\n" +
+                "  }\n" +
+                "}", id);
+
+        return QueryFactory.create(selectQuery);
+    }
 }
