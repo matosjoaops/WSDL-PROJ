@@ -4,6 +4,7 @@ import models.Event;
 import operations.dataaccess.EventDA;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,10 @@ public class EventService {
 
     public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
         return eventDA.insertEvent(insertForm);
+    }
+
+    public ArrayList<HashMap<String, String>> searchEvent(String searchString) {
+        return eventDA.searchEvent(searchString);
     }
 }
 

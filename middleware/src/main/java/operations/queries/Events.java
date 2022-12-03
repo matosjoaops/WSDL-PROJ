@@ -120,4 +120,31 @@ public class Events {
 
         return insertQueries;
     }
+
+    public Query searchEvent(String searchString) {
+        Variable event = SparqlBuilder.var("event");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        SelectQuery selectQuery = Queries.SELECT().distinct().prefix(Constants.type).prefix(Constants.rdf).
+                select(event, predicate, object).
+                where(
+                        event.has(predicate, object).
+                                filter(
+                                        Expressions.and(
+                                            Expressions.regex(
+                                                Expressions.str(event),
+                                                "^http://dbtune.org/classical/resource/event/"
+                                            ),
+                                            Expressions.regex(
+                                                Expressions.str(object),
+                                                searchString,
+                                                "i"
+                                            )
+                                        )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }

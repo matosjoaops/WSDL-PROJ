@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import services.EventService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,5 +70,15 @@ public class EventController extends Controller {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
             }
         }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = {"/event/search/{searchString}"})
+    public ArrayList<HashMap<String, String>> searchEvent(
+            @PathVariable(name = "searchString") String searchString
+    ) {
+        EventService eventService = new EventService(getFusekiHost("default"));
+
+        return eventService.searchEvent(searchString);
     }
 }

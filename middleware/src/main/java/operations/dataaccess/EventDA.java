@@ -106,4 +106,10 @@ public class EventDA {
 
         return response;
     }
+
+    public ArrayList<HashMap<String, String>> searchEvent(String searchString) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        return conn.executeQuery(queries.searchEvent(searchString));
+    }
 }
