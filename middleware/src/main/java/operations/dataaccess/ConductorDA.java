@@ -2,8 +2,10 @@ package operations.dataaccess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
 
 import models.Conductor;
 import operations.SPARQLOperations;
@@ -41,5 +43,16 @@ public class ConductorDA {
         conductor.setAssociatedTriples(associatedTriples);
 
         return conductor;
+    }
+
+    public Map<String, String> deleteConductor(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        conn.executeUpdate(queries.deleteConductor(id));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Conductor deleted successfully.");
+
+        return response;
     }
 }

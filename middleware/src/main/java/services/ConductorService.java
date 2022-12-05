@@ -1,6 +1,7 @@
 package services;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -24,5 +25,9 @@ public class ConductorService {
         result.put("associatedTriples", conductor.getAssociatedTriples());
 
         return result;
+    }
+
+    public Map<String, String> delete(String id) throws Exception {
+        return conductorDA.deleteConductor(id);
     }
 }
