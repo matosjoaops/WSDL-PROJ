@@ -30,4 +30,9 @@ public class ConductorService {
     public Map<String, String> delete(String id) throws Exception {
         return conductorDA.deleteConductor(id);
     }
+
+    public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
+        return conductorDA.insertConductor(insertForm);
+    }
+    
 }

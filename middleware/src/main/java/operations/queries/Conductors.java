@@ -1,18 +1,26 @@
 package operations.queries;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.update.UpdateFactory;
 import org.apache.jena.update.UpdateRequest;
 import org.eclipse.rdf4j.sparqlbuilder.constraint.Expressions;
 import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
+import org.eclipse.rdf4j.sparqlbuilder.core.query.InsertDataQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import utils.Constants;
 
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
+
 public class Conductors {
+
     public Conductors() {
 
     }
@@ -59,5 +67,21 @@ public class Conductors {
                 );
 
         return UpdateFactory.create(deleteQuery.getQueryString());
+    }
+
+    public ArrayList<UpdateRequest> insertConductor(String conductorURIString, ArrayList<HashMap<String, Iri>> associatedTriples) {
+        Iri conductorURI = iri(conductorURIString);
+
+        ArrayList<UpdateRequest> insertQueries = new ArrayList<>();
+
+        for (HashMap<String, Iri> triple: associatedTriples) {
+            InsertDataQuery insertDataQuery = Queries.INSERT_DATA()
+                    .insertData(
+                            conductorURI.has(triple.get("predicate"), triple.get("object"))
+                    );
+            insertQueries.add(UpdateFactory.create(insertDataQuery.getQueryString()));
+        }
+
+        return insertQueries;
     }
 }

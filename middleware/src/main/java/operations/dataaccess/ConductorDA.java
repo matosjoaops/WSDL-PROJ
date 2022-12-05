@@ -11,6 +11,9 @@ import models.Conductor;
 import operations.SPARQLOperations;
 import operations.queries.Conductors;
 
+import static operations.dataaccess.EventDA.convertTriplesStringsToIRIs;
+import static operations.dataaccess.EventDA.validateInsertForm;
+
 public class ConductorDA {
     public HashMap<String, String> hosts = new HashMap<>();
     Conductors queries = new Conductors();
@@ -52,6 +55,31 @@ public class ConductorDA {
 
         HashMap<String, String> response = new HashMap<>();
         response.put("message", "Conductor deleted successfully.");
+
+        return response;
+    }
+
+    public Map<String, String> insertConductor(Map<String, Object> insertForm) throws Exception {
+        HashMap<String, String> response = new HashMap<>();
+
+        if (!validateInsertForm(insertForm)) {
+            response.put("message", "Invalid body! Please provide the conductor URI and the associated triples.");
+            return response;
+        }
+
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        String conductorURI = (String) insertForm.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        ArrayList<UpdateRequest> insertQueries = queries.insertConductor(
+                conductorURI,
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
+
+        response.put("message", "Conductor created successfully.");
 
         return response;
     }
