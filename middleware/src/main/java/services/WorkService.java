@@ -6,6 +6,7 @@ import operations.dataaccess.ComposerDA;
 import operations.dataaccess.WorkDA;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,5 +43,9 @@ public class WorkService {
 
     public Map<String, String> delete(String composerId, String workId) throws Exception {
         return workDA.deleteWork(composerId, workId);
+    }
+
+    public ArrayList<HashMap<String, String>> searchWork(String searchString) {
+        return workDA.searchWork(searchString);
     }
 }

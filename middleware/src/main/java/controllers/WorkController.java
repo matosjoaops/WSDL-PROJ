@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import services.ComposerService;
 import services.WorkService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,5 +83,15 @@ public class WorkController extends Controller {
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "The work could not be deleted.");
         }
+    }
+
+    @CrossOrigin
+    @GetMapping("/search")
+    public ArrayList<HashMap<String, String>> searchWork(
+            @PathVariable("searchString") String searchString
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        WorkService workService = new WorkService(fusekiHost);
+        return workService.searchWork(searchString);
     }
 }

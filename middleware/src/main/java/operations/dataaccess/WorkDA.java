@@ -15,18 +15,15 @@ import static operations.dataaccess.EventDA.validateInsertForm;
 
 public class WorkDA {
 
-    public HashMap<String, String> hosts = new HashMap<>();
+    public String host;
     Works queries = new Works();
     public Model model;
 
     public WorkDA(String host) {
-        this.hosts.put("sparql", host + "sparql");
-        this.hosts.put("data", host + "data");
-        this.hosts.put("update", host + "update");
-        this.hosts.put("default", host);
+        this.host = host;
     }
     public Work getWork(String composerId, String workId) {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         Work work = new Work();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getWork(composerId, workId));
@@ -57,7 +54,7 @@ public class WorkDA {
             return response;
         }
 
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
 
         String workURI = (String) workData.get("URI");
         ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) workData.get("associatedTriples");
@@ -75,12 +72,18 @@ public class WorkDA {
     }
 
     public Map<String, String> deleteWork(String composerId, String workId) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         conn.executeUpdate(queries.deleteWork(composerId, workId));
 
         HashMap<String, String> response = new HashMap<>();
         response.put("message", "Work was deleted successfully.");
 
         return response;
+    }
+
+    public ArrayList<HashMap<String, String>> searchWork(String searchString) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        return conn.executeQuery(queries.searchWork(searchString));
     }
 }

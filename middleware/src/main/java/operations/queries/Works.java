@@ -85,4 +85,26 @@ public class Works {
 
         return insertQueries;
     }
+
+    public Query searchWork(String searchString) {
+        Variable work = SparqlBuilder.var("work");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        SelectQuery selectQuery = Queries.SELECT().distinct().prefix(Constants.ns2).prefix(Constants.rdf).
+                select(work, predicate, object).
+                where(
+                        work.has(Constants.rdf.iri("type"), Constants.ns2.iri("MusicalWork")).
+                                andHas(predicate, object).
+                                filter(
+                                        Expressions.regex(
+                                                Expressions.str(object),
+                                                searchString,
+                                                "i"
+                                        )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }
