@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,5 +35,8 @@ public class ConductorService {
     public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
         return conductorDA.insertConductor(insertForm);
     }
-    
+
+    public ArrayList<HashMap<String, String>> searchConductor(String searchString) {
+        return conductorDA.searchConductor(searchString);
+    }
 }

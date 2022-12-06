@@ -15,18 +15,15 @@ import static operations.dataaccess.EventDA.convertTriplesStringsToIRIs;
 import static operations.dataaccess.EventDA.validateInsertForm;
 
 public class ConductorDA {
-    public HashMap<String, String> hosts = new HashMap<>();
+    public String host;
     Conductors queries = new Conductors();
     public Model model;
 
     public ConductorDA(String host) {
-        this.hosts.put("sparql", host + "sparql");
-        this.hosts.put("data", host + "data");
-        this.hosts.put("update", host + "update");
-        this.hosts.put("default", host);
+        this.host = host;
     }
     public Conductor getConductor(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         Conductor conductor = new Conductor();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getConductor(id));
@@ -49,7 +46,7 @@ public class ConductorDA {
     }
 
     public Map<String, String> deleteConductor(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
 
         conn.executeUpdate(queries.deleteConductor(id));
 
@@ -67,7 +64,7 @@ public class ConductorDA {
             return response;
         }
 
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
 
         String conductorURI = (String) insertForm.get("URI");
         ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
@@ -82,5 +79,11 @@ public class ConductorDA {
         response.put("message", "Conductor created successfully.");
 
         return response;
+    }
+
+    public ArrayList<HashMap<String, String>> searchConductor(String searchString) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        return conn.executeQuery(queries.searchConductor(searchString));
     }
 }

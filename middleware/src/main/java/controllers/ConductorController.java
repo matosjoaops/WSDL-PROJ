@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import services.ComposerService;
 import services.ConductorService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,5 +78,15 @@ public class ConductorController extends Controller {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
             }
         }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = {"/conductor/search/{searchString}"})
+    public ArrayList<HashMap<String, String>> searchConductor(
+            @PathVariable(name = "searchString") String searchString
+    ) {
+        ConductorService conductorService = new ConductorService(getFusekiHost("default"));
+
+        return conductorService.searchConductor(searchString);
     }
 }

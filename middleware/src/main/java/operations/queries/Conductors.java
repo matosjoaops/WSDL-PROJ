@@ -84,4 +84,26 @@ public class Conductors {
 
         return insertQueries;
     }
+
+    public Query searchConductor(String searchString) {
+        Variable conductor = SparqlBuilder.var("conductor");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        SelectQuery selectQuery = Queries.SELECT().distinct().prefix(Constants.type).prefix(Constants.rdf).
+                select(conductor, predicate, object).
+                where(
+                        conductor.has(Constants.rdf.iri("type"), Constants.type.iri("Conductor")).
+                                andHas(predicate, object).
+                                filter(
+                                        Expressions.regex(
+                                                Expressions.str(object),
+                                                searchString,
+                                                "i"
+                                        )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }
