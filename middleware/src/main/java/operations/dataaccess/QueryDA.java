@@ -12,20 +12,17 @@ import java.util.List;
 
 public class QueryDA {
 
-    public HashMap<String, String> hosts = new HashMap<>();
+    public String host;
 
     MyQueries queries = new MyQueries();
     public Model model;
 
     public QueryDA(String host) {
-        this.hosts.put("sparql", host + "sparql");
-        this.hosts.put("data", host + "data");
-        this.hosts.put("update", host + "update");
-        this.hosts.put("default", host);
+        this.host = host;
     }
 
     public List<Work> getComposerWorks(String composerId) {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         List<Work> works = new ArrayList<>();
         String lastURI = "";
 
