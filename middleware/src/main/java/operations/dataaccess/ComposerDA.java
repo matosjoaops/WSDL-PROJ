@@ -4,23 +4,26 @@ import models.Composer;
 import operations.SPARQLOperations;
 import operations.queries.Composers;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import static operations.dataaccess.EventDA.convertTriplesStringsToIRIs;
+import static operations.dataaccess.EventDA.validateInsertForm;
+
 
 public class ComposerDA {
-    public HashMap<String, String> hosts = new HashMap<>();
+    public String host;
     Composers queries = new Composers();
     public Model model;
 
     public ComposerDA(String host) {
-        this.hosts.put("sparql", host + "sparql");
-        this.hosts.put("data", host + "data");
-        this.hosts.put("update", host + "update");
-        this.hosts.put("default", host);
+        this.host = host;
     }
     public Composer getComposer(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         Composer composer = new Composer();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposer(id));
@@ -43,7 +46,7 @@ public class ComposerDA {
     }
 
     public Composer getDBpediaData(String id) throws Exception {
-        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+        SPARQLOperations conn = new SPARQLOperations(this.host);
         Composer composer = new Composer();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getDBpediaData(id));
@@ -55,5 +58,47 @@ public class ComposerDA {
         composer.setAssociatedTriples(associatedTriples);
 
         return composer;
+    }
+
+    public Map<String, String> deleteComposer(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        conn.executeUpdate(queries.deleteComposer(id));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Composer deleted successfully.");
+
+        return response;
+    }
+
+    public Map<String, String> insertComposer(Map<String, Object> insertForm) throws Exception {
+        HashMap<String, String> response = new HashMap<>();
+
+        if (!validateInsertForm(insertForm)) {
+            response.put("message", "Invalid body! Please provide the composer URI and the associated triples.");
+            return response;
+        }
+
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        String composerURI = (String) insertForm.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        ArrayList<UpdateRequest> insertQueries = queries.insertComposer(
+                composerURI,
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
+
+        response.put("message", "Composer created successfully.");
+
+        return response;
+    }
+
+    public ArrayList<HashMap<String, String>> searchComposer(String searchString) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+
+        return conn.executeQuery(queries.searchComposer(searchString));
     }
 }

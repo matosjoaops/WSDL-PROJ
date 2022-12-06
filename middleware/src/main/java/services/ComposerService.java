@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ComposerService {
@@ -35,6 +36,18 @@ public class ComposerService {
         result.put("associatedTriples", composer.getAssociatedTriples());
 
         return result;
+    }
+
+    public Map<String, String> delete(String id) throws Exception {
+        return composerDA.deleteComposer(id);
+    }
+
+    public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
+        return composerDA.insertComposer(insertForm);
+    }
+
+    public ArrayList<HashMap<String, String>> searchComposer(String searchString) {
+        return composerDA.searchComposer(searchString);
     }
 }
 
