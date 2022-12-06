@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ComposerDA {
     public HashMap<String, String> hosts = new HashMap<>();
@@ -55,5 +56,16 @@ public class ComposerDA {
         composer.setAssociatedTriples(associatedTriples);
 
         return composer;
+    }
+
+    public Map<String, String> deleteComposer(String id) throws Exception {
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        conn.executeUpdate(queries.deleteComposer(id));
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Composer deleted successfully.");
+
+        return response;
     }
 }
