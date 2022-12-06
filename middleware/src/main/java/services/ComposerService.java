@@ -41,6 +41,10 @@ public class ComposerService {
     public Map<String, String> delete(String id) throws Exception {
         return composerDA.deleteComposer(id);
     }
+
+    public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
+        return composerDA.insertComposer(insertForm);
+    }
 }
 
 

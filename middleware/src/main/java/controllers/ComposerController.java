@@ -71,4 +71,23 @@ public class ComposerController extends Controller {
         }
     }
 
+    @CrossOrigin
+    @PostMapping(value = {"/composer"})
+    public Map<String, String> insertComposer(
+            @RequestBody Map<String, Object> insertForm
+    ) {
+        ComposerService composerService = new ComposerService(getFusekiHost("default"));
+
+        try {
+            return composerService.insert(insertForm);
+        } catch(Exception e) {
+            if (e.getMessage() != null) {
+                HashMap<String, String> response = new HashMap<>();
+                response.put("message", e.getMessage());
+                return response;
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
+            }
+        }
+    }
 }

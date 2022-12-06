@@ -4,10 +4,15 @@ import models.Composer;
 import operations.SPARQLOperations;
 import operations.queries.Composers;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.update.UpdateRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static operations.dataaccess.EventDA.convertTriplesStringsToIRIs;
+import static operations.dataaccess.EventDA.validateInsertForm;
+
 
 public class ComposerDA {
     public HashMap<String, String> hosts = new HashMap<>();
@@ -65,6 +70,31 @@ public class ComposerDA {
 
         HashMap<String, String> response = new HashMap<>();
         response.put("message", "Composer deleted successfully.");
+
+        return response;
+    }
+
+    public Map<String, String> insertComposer(Map<String, Object> insertForm) throws Exception {
+        HashMap<String, String> response = new HashMap<>();
+
+        if (!validateInsertForm(insertForm)) {
+            response.put("message", "Invalid body! Please provide the composer URI and the associated triples.");
+            return response;
+        }
+
+        SPARQLOperations conn = new SPARQLOperations(this.hosts.get("default"));
+
+        String composerURI = (String) insertForm.get("URI");
+        ArrayList<HashMap<String, String>> associatedTriples = (ArrayList<HashMap<String, String>>) insertForm.get("associatedTriples");
+
+        ArrayList<UpdateRequest> insertQueries = queries.insertComposer(
+                composerURI,
+                convertTriplesStringsToIRIs(associatedTriples)
+        );
+
+        conn.executeUpdateList(insertQueries);
+
+        response.put("message", "Composer created successfully.");
 
         return response;
     }

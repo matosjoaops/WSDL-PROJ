@@ -120,4 +120,20 @@ public class Composers {
 
         return UpdateFactory.create(deleteQuery.getQueryString());
     }
+
+    public ArrayList<UpdateRequest> insertComposer(String composerURIString, ArrayList<HashMap<String, Iri>> associatedTriples) {
+        Iri composerURI = iri(composerURIString);
+
+        ArrayList<UpdateRequest> insertQueries = new ArrayList<>();
+
+        for (HashMap<String, Iri> triple: associatedTriples) {
+            InsertDataQuery insertDataQuery = Queries.INSERT_DATA()
+                    .insertData(
+                            composerURI.has(triple.get("predicate"), triple.get("object"))
+                    );
+            insertQueries.add(UpdateFactory.create(insertDataQuery.getQueryString()));
+        }
+
+        return insertQueries;
+    }
 }
