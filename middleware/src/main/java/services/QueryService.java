@@ -1,0 +1,30 @@
+package services;
+
+import models.Work;
+import operations.dataaccess.QueryDA;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class QueryService {
+    QueryDA queryDA;
+
+    public QueryService(String host) {
+        this.queryDA = new QueryDA(host);
+    }
+
+    public Map<String, Map<String, Object>> getComposerWorks(String composerId) {
+        List<Work> works = queryDA.getComposerWorks(composerId);
+        Map<String, Map<String, Object>> result = new HashMap<>();
+
+        for (Work work : works) {
+            Map<String, Object> currentWork = new HashMap<>();
+            currentWork.put("URI", work.getURI());
+            currentWork.put("associatedTriples", work.getAssociatedTriples());
+            result.put(work.getURI(), currentWork);
+        }
+
+        return result;
+    }
+}

@@ -16,6 +16,10 @@ public class Work {
         this.associatedTriples = associatedTriples;
     }
 
+    public void addTriple(HashMap<String, String> triple) {
+        this.associatedTriples.add(triple);
+    }
+
     public String getURI() {
         return URI;
     }
