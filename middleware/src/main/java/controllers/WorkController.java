@@ -86,7 +86,7 @@ public class WorkController extends Controller {
     }
 
     @CrossOrigin
-    @GetMapping("/search")
+    @GetMapping("/search/{searchString}")
     public ArrayList<HashMap<String, String>> searchWork(
             @PathVariable("searchString") String searchString
     ) {
