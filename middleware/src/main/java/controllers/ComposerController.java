@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import services.ComposerService;
+import services.EventService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,5 +91,15 @@ public class ComposerController extends Controller {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some error occurred.");
             }
         }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = {"/composer/search/{searchString}"})
+    public ArrayList<HashMap<String, String>> searchComposer(
+            @PathVariable(name = "searchString") String searchString
+    ) {
+        ComposerService composerService = new ComposerService(getFusekiHost("default"));
+
+        return composerService.searchComposer(searchString);
     }
 }

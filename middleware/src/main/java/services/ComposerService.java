@@ -45,6 +45,10 @@ public class ComposerService {
     public Map<String, String> insert(Map<String, Object> insertForm) throws Exception {
         return composerDA.insertComposer(insertForm);
     }
+
+    public ArrayList<HashMap<String, String>> searchComposer(String searchString) {
+        return composerDA.searchComposer(searchString);
+    }
 }
 
 

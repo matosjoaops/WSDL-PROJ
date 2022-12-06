@@ -136,4 +136,26 @@ public class Composers {
 
         return insertQueries;
     }
+
+    public Query searchComposer(String searchString) {
+        Variable composer = SparqlBuilder.var("composer");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        SelectQuery selectQuery = Queries.SELECT().distinct().prefix(Constants.type).prefix(Constants.rdf).
+                select(composer, predicate, object).
+                where(
+                        composer.has(Constants.rdf.iri("type"), Constants.type.iri("Composer")).
+                        andHas(predicate, object).
+                                filter(
+                                    Expressions.regex(
+                                            Expressions.str(object),
+                                            searchString,
+                                            "i"
+                                    )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }
