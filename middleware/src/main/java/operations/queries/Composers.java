@@ -11,6 +11,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.DeleteDataQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.InsertDataQuery;
+import org.eclipse.rdf4j.sparqlbuilder.core.query.ModifyQuery;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.graphpattern.GraphPatternNotTriples;
@@ -20,6 +21,7 @@ import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
 import utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
@@ -94,5 +96,44 @@ public class Composers {
                 "}", id);
 
         return QueryFactory.create(selectQuery);
+    }
+
+    public UpdateRequest deleteComposer(String id) {
+        Variable composer = SparqlBuilder.var("composer");
+        Variable predicate = SparqlBuilder.var("predicate");
+        Variable object = SparqlBuilder.var("object");
+
+        ModifyQuery deleteQuery = Queries.DELETE(composer.has(predicate, object)).
+                where(
+                        composer.has(predicate, object).
+                                    filter(Expressions.or(
+                                        Expressions.regex(
+                                                Expressions.str(composer),
+                                                String.format("^http://dbtune.org/classical/resource/composer/%s$", id)
+                                        ),
+                                        Expressions.regex(
+                                                Expressions.str(object),
+                                                String.format("^http://dbtune.org/classical/resource/composer/%s$", id)
+                                        )
+                                ))
+                );
+
+        return UpdateFactory.create(deleteQuery.getQueryString());
+    }
+
+    public ArrayList<UpdateRequest> insertComposer(String composerURIString, ArrayList<HashMap<String, Iri>> associatedTriples) {
+        Iri composerURI = iri(composerURIString);
+
+        ArrayList<UpdateRequest> insertQueries = new ArrayList<>();
+
+        for (HashMap<String, Iri> triple: associatedTriples) {
+            InsertDataQuery insertDataQuery = Queries.INSERT_DATA()
+                    .insertData(
+                            composerURI.has(triple.get("predicate"), triple.get("object"))
+                    );
+            insertQueries.add(UpdateFactory.create(insertDataQuery.getQueryString()));
+        }
+
+        return insertQueries;
     }
 }
