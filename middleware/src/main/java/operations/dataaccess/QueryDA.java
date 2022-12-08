@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QueryDA {
 
@@ -119,5 +120,22 @@ public class QueryDA {
         associatedTriples.forEach((triple) -> compositions.add(triple.get("composition")));
 
         return compositions;
+    }
+
+    public Map<String, Object> getComposerLocations(String composerId) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        Map<String, Object> result = new HashMap<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposerLocations(composerId));
+        associatedTriples.forEach((triple) -> {
+            String predicate = triple.get("predicate");
+            String key = predicate.substring(predicate.lastIndexOf('/') + 1);
+            Map<String, String> data = new HashMap<>();
+            data.put("coordinates", triple.get("coordinates"));
+            data.put("placeURI", triple.get("value"));
+            result.put(key, data);
+        });
+
+        return result;
     }
 }

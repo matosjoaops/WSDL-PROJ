@@ -112,4 +112,16 @@ public class QueriesController extends Controller {
         return compositions;
     }
 
+    @CrossOrigin
+    @GetMapping("/composerLocations")
+    public Map<String, Object> getComposerLocations(
+            @RequestParam("composerId") String composerId
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        Map<String, Object> result = service.getComposerLocations(composerId);
+        if (result.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find location data for the composer with the provided ID.");
+        return result;
+    }
+
 }

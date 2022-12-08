@@ -54,4 +54,8 @@ public class QueryService {
     public List<String> getCompositionsByPlace(String place) {
         return queryDA.getCompositionsByPlace(place);
     }
+
+    public Map<String, Object> getComposerLocations(String composerId) {
+        return queryDA.getComposerLocations(composerId);
+    }
 }
