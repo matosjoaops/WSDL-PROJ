@@ -80,4 +80,15 @@ public class QueryDA {
 
         return composers;
     }
+
+    public List<String> getPartsOfWork(String composerId, String workId) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> parts = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getWorkParts(composerId, workId));
+        System.out.println(associatedTriples);
+        associatedTriples.forEach((triple) -> parts.add(triple.get("part")));
+
+        return parts;
+    }
 }

@@ -39,4 +39,8 @@ public class QueryService {
     public List<String> getComposersWhoWereInfluenced(String composerId) {
         return queryDA.getComposersWhoWereInfluenced(composerId);
     }
+
+    public List<String> getPartsOfWork(String composerId, String workId) {
+        return queryDA.getPartsOfWork(composerId, workId);
+    }
 }

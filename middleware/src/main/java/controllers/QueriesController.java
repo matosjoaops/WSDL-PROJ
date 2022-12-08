@@ -62,4 +62,17 @@ public class QueriesController extends Controller {
         return composers;
     }
 
+    @CrossOrigin
+    @GetMapping("/partsOfWork")
+    public List<String> getPartsOfWork(
+            @RequestParam("composerId") String composerId,
+            @RequestParam("workId") String workId
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> parts = service.getPartsOfWork(composerId, workId);
+        if (parts.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find parts of the work with the provided IDs.");
+        return parts;
+    }
+
 }

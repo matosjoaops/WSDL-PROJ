@@ -1,6 +1,5 @@
 package operations.queries;
 
-import org.apache.jena.ext.xerces.impl.dv.ValidatedInfo;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
 import org.eclipse.rdf4j.sparqlbuilder.constraint.Expressions;
@@ -8,7 +7,9 @@ import org.eclipse.rdf4j.sparqlbuilder.core.SparqlBuilder;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import utils.Constants;
+import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
 public class MyQueries {
     public MyQueries() {}
@@ -102,5 +103,24 @@ public class MyQueries {
                 );
 
         return QueryFactory.create(selectQuery.getQueryString());
+    }
+
+    public Query getWorkParts(String composerId, String workId) {
+        Variable part = SparqlBuilder.var("part");
+        Iri workIri = iri(String.format("http://dbtune.org/classical/resource/work/%s/%s", composerId, workId));
+
+        SelectQuery selectQuery = Queries.SELECT()
+                .prefix(Constants.rdf)
+                .prefix(Constants.rdfs)
+                .prefix(Constants.type)
+                .prefix(Constants.ns2)
+                .prefix(Constants.dc)
+                .select(part)
+                .where(
+                        workIri
+                                .has(Constants.dc.iri("hasPart"), part)
+                );
+
+        return  QueryFactory.create(selectQuery.getQueryString());
     }
 }
