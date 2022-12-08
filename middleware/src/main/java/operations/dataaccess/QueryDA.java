@@ -50,4 +50,14 @@ public class QueryDA {
 
         return works;
     }
+
+    public List<String> getWorkByKey(String key) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> works = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getWorksByKey(key));
+        associatedTriples.forEach((triple) -> works.add(triple.get("work")));
+
+        return works;
+    }
 }

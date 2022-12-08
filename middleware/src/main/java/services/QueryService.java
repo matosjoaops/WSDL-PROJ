@@ -27,4 +27,8 @@ public class QueryService {
 
         return result;
     }
+
+    public List<String> getWorkByKey(String key) {
+        return queryDA.getWorkByKey(key);
+    }
 }

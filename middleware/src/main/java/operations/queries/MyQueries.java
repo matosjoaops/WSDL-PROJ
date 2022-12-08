@@ -32,4 +32,22 @@ public class MyQueries {
 
         return QueryFactory.create(selectQuery.getQueryString());
     }
+
+    public Query getWorksByKey(String key) {
+        Variable work = SparqlBuilder.var("work");
+
+        SelectQuery selectQuery = Queries.SELECT()
+                .prefix(Constants.rdf)
+                .prefix(Constants.rdfs)
+                .prefix(Constants.type)
+                .prefix(Constants.ns2)
+                .select(work)
+                .where(
+                        work
+                                .has(Constants.rdf.iri("type"), Constants.ns2.iri("MusicalWork"))
+                                .andHas(Constants.ns2.iri("key"), key)
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }
