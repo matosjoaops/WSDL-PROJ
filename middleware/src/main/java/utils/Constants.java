@@ -13,4 +13,5 @@ public final class Constants {
     public static final Prefix composer = SparqlBuilder.prefix("composer", iri("http://dbtune.org/classical/resource/composer/"));
     public static final Prefix type = SparqlBuilder.prefix("type", iri("http://dbtune.org/classical/resource/type/"));
     public static final Prefix ns2 = SparqlBuilder.prefix("ns2", iri("http://purl.org/ontology/mo/"));
+    public static final Prefix ns4 = SparqlBuilder.prefix("ns4", iri("http://purl.org/ontology/classicalmusicnav#"));
 }

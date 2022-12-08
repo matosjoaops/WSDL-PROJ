@@ -60,4 +60,24 @@ public class QueryDA {
 
         return works;
     }
+
+    public List<String> getComposersWhoInfluenced(String composerId) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> composers = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposersWhoInfluenced(composerId));
+        associatedTriples.forEach((triple) -> composers.add(triple.get("composer")));
+
+        return composers;
+    }
+
+    public List<String> getComposersWhoWereInfluenced(String composerId) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> composers = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getComposersWhoWereInfluenced(composerId));
+        associatedTriples.forEach((triple) -> composers.add(triple.get("composer")));
+
+        return composers;
+    }
 }

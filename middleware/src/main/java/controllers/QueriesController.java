@@ -38,5 +38,28 @@ public class QueriesController extends Controller {
         return works;
     }
 
+    @CrossOrigin
+    @GetMapping("/composersWhoInfluenced")
+    public List<String> getComposersWhoInfluenced(
+            @RequestParam("composerId") String composerId
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> composers = service.getComposersWhoInfluenced(composerId);
+        if (composers.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find any composers that influenced the composer with the provided ID.");
+        return composers;
+    }
+
+    @CrossOrigin
+    @GetMapping("/composersWhoWereInfluenced")
+    public List<String> getComposersWhoWereInfluenced(
+            @RequestParam("composerId") String composerId
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> composers = service.getComposersWhoWereInfluenced(composerId);
+        if (composers.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find any composers that were influenced by the composer with the provided ID.");
+        return composers;
+    }
 
 }

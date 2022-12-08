@@ -31,4 +31,12 @@ public class QueryService {
     public List<String> getWorkByKey(String key) {
         return queryDA.getWorkByKey(key);
     }
+
+    public List<String> getComposersWhoInfluenced(String composerId) {
+        return queryDA.getComposersWhoInfluenced(composerId);
+    }
+
+    public List<String> getComposersWhoWereInfluenced(String composerId) {
+        return queryDA.getComposersWhoWereInfluenced(composerId);
+    }
 }
