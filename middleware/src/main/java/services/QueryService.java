@@ -50,4 +50,8 @@ public class QueryService {
     public List<String> getCompositionsByTimeRange(int year1, int year2) {
         return queryDA.getCompositionsByTimeRange(year1, year2);
     }
+
+    public List<String> getCompositionsByPlace(String place) {
+        return queryDA.getCompositionsByPlace(place);
+    }
 }

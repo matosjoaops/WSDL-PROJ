@@ -100,4 +100,16 @@ public class QueriesController extends Controller {
         return compositions;
     }
 
+    @CrossOrigin
+    @GetMapping("/compositionsByPlace")
+    public List<String> getCompositionsByPlace(
+            @RequestParam("place") String place
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> compositions = service.getCompositionsByPlace(place);
+        if (compositions.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find compositions for the provided place.");
+        return compositions;
+    }
+
 }

@@ -110,4 +110,14 @@ public class QueryDA {
 
         return compositions;
     }
+
+    public List<String> getCompositionsByPlace(String place) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> compositions = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getCompositionsByPlace(place));
+        associatedTriples.forEach((triple) -> compositions.add(triple.get("composition")));
+
+        return compositions;
+    }
 }

@@ -178,4 +178,24 @@ public class MyQueries {
 
         return QueryFactory.create(selectQuery.getQueryString());
     }
+
+    public Query getCompositionsByPlace(String place) {
+        Variable composition = SparqlBuilder.var("composition");
+
+        SelectQuery selectQuery = Queries.SELECT()
+                .prefix(Constants.rdf)
+                .prefix(Constants.rdfs)
+                .prefix(Constants.type)
+                .prefix(Constants.ns2)
+                .prefix(Constants.ns5)
+                .prefix(Constants.dc)
+                .select(composition)
+                .where(
+                        composition
+                                .has(Constants.rdf.iri("type"), Constants.ns2.iri("Composition"))
+                                .andHas(Constants.ns5.iri("place"), place)
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
 }
