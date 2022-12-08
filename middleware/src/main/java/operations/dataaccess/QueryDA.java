@@ -86,9 +86,28 @@ public class QueryDA {
         List<String> parts = new ArrayList<>();
 
         ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getWorkParts(composerId, workId));
-        System.out.println(associatedTriples);
         associatedTriples.forEach((triple) -> parts.add(triple.get("part")));
 
         return parts;
+    }
+
+    public List<String> getCompositionsByYear(String year) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> compositions = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getCompositionsByYear(year));
+        associatedTriples.forEach((triple) -> compositions.add(triple.get("composition")));
+
+        return compositions;
+    }
+
+    public List<String> getCompositionsByTimeRange(int year1, int year2) {
+        SPARQLOperations conn = new SPARQLOperations(this.host);
+        List<String> compositions = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> associatedTriples = conn.executeQuery(queries.getCompositionsByTimeRange(year1, year2));
+        associatedTriples.forEach((triple) -> compositions.add(triple.get("composition")));
+
+        return compositions;
     }
 }

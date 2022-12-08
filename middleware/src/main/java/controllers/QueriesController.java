@@ -75,4 +75,29 @@ public class QueriesController extends Controller {
         return parts;
     }
 
+    @CrossOrigin
+    @GetMapping("/compositionsByYear")
+    public List<String> getCompositionsByYear(
+            @RequestParam("year") String year
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> compositions = service.getCompositionsByYear(year);
+        if (compositions.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find compositions for the provided year");
+        return compositions;
+    }
+
+    @CrossOrigin
+    @GetMapping("/compositionsByTimeRange")
+    public List<String> getCompositionsByTimeRange(
+            @RequestParam("year1") int year1,
+            @RequestParam("year2") int year2
+    ) {
+        String fusekiHost = getFusekiHost("default");
+        QueryService service = new QueryService(fusekiHost);
+        List<String> compositions = service.getCompositionsByTimeRange(year1, year2);
+        if (compositions.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find compositions for the provided time range.");
+        return compositions;
+    }
+
 }

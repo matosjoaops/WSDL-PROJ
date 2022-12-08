@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.Queries;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
+import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
 import utils.Constants;
 import static org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf.iri;
 
@@ -121,6 +122,60 @@ public class MyQueries {
                                 .has(Constants.dc.iri("hasPart"), part)
                 );
 
-        return  QueryFactory.create(selectQuery.getQueryString());
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
+
+    public Query getCompositionsByYear(String year) {
+        Variable composition = SparqlBuilder.var("composition");
+        Variable date = SparqlBuilder.var("date");
+
+        SelectQuery selectQuery = Queries.SELECT()
+                .prefix(Constants.rdf)
+                .prefix(Constants.rdfs)
+                .prefix(Constants.type)
+                .prefix(Constants.ns2)
+                .prefix(Constants.ns5)
+                .prefix(Constants.dc)
+                .select(composition)
+                .where(
+                        composition
+                                .has(Constants.rdf.iri("type"), Constants.ns2.iri("Composition"))
+                                .andHas(Constants.ns5.iri("date"), date)
+                                .filter(
+                                        Expressions.equals(
+                                                Expressions.str(date),
+                                                Rdf.literalOf(year)
+                                        )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
+    }
+
+    public Query getCompositionsByTimeRange(int year1, int year2) {
+        Variable composition = SparqlBuilder.var("composition");
+        Variable date = SparqlBuilder.var("date");
+
+        SelectQuery selectQuery = Queries.SELECT()
+                .prefix(Constants.rdf)
+                .prefix(Constants.rdfs)
+                .prefix(Constants.type)
+                .prefix(Constants.ns2)
+                .prefix(Constants.ns5)
+                .prefix(Constants.dc)
+                .select(composition)
+                .where(
+                        composition
+                                .has(Constants.rdf.iri("type"), Constants.ns2.iri("Composition"))
+                                .andHas(Constants.ns5.iri("date"), date)
+                                .filter(
+                                        Expressions.and(
+                                                Expressions.gt(date, year1),
+                                                Expressions.lt(date, year2)
+                                        )
+                                )
+                );
+
+        return QueryFactory.create(selectQuery.getQueryString());
     }
 }

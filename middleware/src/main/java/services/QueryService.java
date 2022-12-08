@@ -43,4 +43,11 @@ public class QueryService {
     public List<String> getPartsOfWork(String composerId, String workId) {
         return queryDA.getPartsOfWork(composerId, workId);
     }
+
+    public List<String> getCompositionsByYear(String year) {
+        return queryDA.getCompositionsByYear(year);
+    }
+    public List<String> getCompositionsByTimeRange(int year1, int year2) {
+        return queryDA.getCompositionsByTimeRange(year1, year2);
+    }
 }
