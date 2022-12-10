@@ -27,4 +27,35 @@ public class QueryService {
 
         return result;
     }
+
+    public List<String> getWorkByKey(String key) {
+        return queryDA.getWorkByKey(key);
+    }
+
+    public List<String> getComposersWhoInfluenced(String composerId) {
+        return queryDA.getComposersWhoInfluenced(composerId);
+    }
+
+    public List<String> getComposersWhoWereInfluenced(String composerId) {
+        return queryDA.getComposersWhoWereInfluenced(composerId);
+    }
+
+    public List<String> getPartsOfWork(String composerId, String workId) {
+        return queryDA.getPartsOfWork(composerId, workId);
+    }
+
+    public List<String> getCompositionsByYear(String year) {
+        return queryDA.getCompositionsByYear(year);
+    }
+    public List<String> getCompositionsByTimeRange(int year1, int year2) {
+        return queryDA.getCompositionsByTimeRange(year1, year2);
+    }
+
+    public List<String> getCompositionsByPlace(String place) {
+        return queryDA.getCompositionsByPlace(place);
+    }
+
+    public Map<String, Object> getComposerLocations(String composerId) {
+        return queryDA.getComposerLocations(composerId);
+    }
 }
