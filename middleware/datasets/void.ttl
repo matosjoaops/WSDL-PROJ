@@ -1,12 +1,10 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix WSDL_DBTUNE: <https://example.com/wsdl_dbtune/> .
 @prefix DBpedia: <https://www.dbpedia.org/> .
-@prefix Wikidata: <https://www.wikidata.org/> .
 
 ## --- our dataset ---
 
@@ -28,15 +26,3 @@ WSDL_DBTUNE:wsdl_dbtune-dbpedia-sameAs  rdf:type void:Linkset ;
                             void:linkPredicate owl:sameAs ;
                             void:target WSDL_DBTUNE: ;
                             void:target DBpedia: .
-
-# interlinking to Wikidata:
-Wikidata:   rdf:type void:Dataset ;
-            foaf:homepage <https://www.wikidata.org/> ;
-            dcterms:title "Wikidata" ;
-            void:exampleResource <https://www.wikidata.org/entity/Q12368917> ;
-            void:sparqlEndpoint <https://query.wikidata.org/sparql> .
-
-WSDL_DBTUNE:wsdl_dbtune-wikidata-sameAs rdf:type void:Linkset ;
-                            void:linkPredicate owl:sameAs ;
-                            void:target WSDL_DBTUNE: ;
-                            void:target Wikidata: .
