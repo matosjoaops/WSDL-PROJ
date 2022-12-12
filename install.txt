@@ -1,0 +1,5 @@
+The project makes use of Docker Composer, so make sure you have Docker and Docker Compose installed. Afterwards, run 
+docker-compose up --build 
+
+in the root of the project.
+The endpoints become available at http://localhost:8080 and are documented in the report. 
